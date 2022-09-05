@@ -1,25 +1,21 @@
-import cors from "cors";
+import "reflect-metadata";
 import "dotenv/config";
+import cors from "cors";
 import express, { Request, Response } from "express";
+import path from "path";
 
 import "express-async-errors";
-// import { resolve } from "path";
 
-import "reflect-metadata";
-// import swaggerFile from "./swagger.json";
 import "./container";
-// import swaggerUi from "swagger-ui-express";
 import { AppError } from "./errors/AppError";
 import { routes } from "./routes";
 
 const app = express();
 
-app.use(express.json());
-// app.use(express.static(resolve(__dirname, "..", "temp")))
-
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(cors());
+app.use(express.json());
 app.use(routes);
+app.use("/images", express.static(path.resolve(__dirname, "..", "tmp")));
 
 app.use((err: Error, request: Request, response: Response) => {
     if (err instanceof AppError) {
@@ -30,7 +26,7 @@ app.use((err: Error, request: Request, response: Response) => {
 
     return response.status(500).json({
         status: "error",
-        message: `Internal server error - ${err.message}`,
+        message: `Internal server error - ${err}`,
     });
 });
 

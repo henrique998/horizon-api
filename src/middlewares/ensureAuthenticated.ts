@@ -1,37 +1,38 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
-import { authConfig } from "../config/auth";
+
 import { AppError } from "../errors/AppError";
 
 interface IPayload {
-  sub: string;
+    sub: string;
 }
 
+const SECRET_KEY = process.env.SECRET_KEY;
+
 async function ensureAuthenticated(
-  req: Request,
-  res: Response,
-  next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) {
-  const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    throw new AppError({ error: true, code: "token.missing" }, 401);
-  }
+    if (!authHeader) {
+        throw new AppError({ error: true, code: "token.missing" }, 401);
+    }
 
-  const [, token] = authHeader?.split(" ");
+    const [, token] = authHeader?.split(" ");
 
-  try {
-    // const { sub } = verify(token, authConfig.SECRET_KEY) as IPayload;
+    try {
+        const { sub } = verify(token, SECRET_KEY) as IPayload;
 
-    // req.user = {
-    //   id: sub
-    // }
+        req.user = {
+            id: sub,
+        };
 
-    next();
-  } catch {
-    throw new AppError({ error: true, code: "token.expired" }, 401);
-  }
+        next();
+    } catch {
+        throw new AppError({ error: true, code: "token.expired" }, 401);
+    }
 }
 
 export { ensureAuthenticated };
-

@@ -1,8 +1,34 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+    id String @id @default(uuid())
+
+    name     String
+    email    String
+    password String
+    avatar   String?
+
+    photos Photo[]
+
+    @@map("accounts")
+}
+
+model Photo {
+    id String @id @default(uuid())
+
+    url String
+
+    account   Account?   @relation(fields: [accountId], references: [id])
+    accountId String?
+
+    createdAt DateTime @default(now())
+
+    @@map("photos")
 }

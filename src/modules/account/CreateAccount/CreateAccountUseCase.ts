@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "../../../errors/AppError";
@@ -29,10 +30,20 @@ class CreateAccountUseCase {
             throw new AppError("password is required!");
         }
 
+        const accountAlreadyExists = await this.accountsRepository.findByEmail(
+            email
+        );
+
+        if (accountAlreadyExists) {
+            throw new AppError("Account already exists!");
+        }
+
+        const hashedPassword = await hash(password, 10);
+
         await this.accountsRepository.create({
             name,
             email,
-            password,
+            password: hashedPassword,
         });
     }
 }
