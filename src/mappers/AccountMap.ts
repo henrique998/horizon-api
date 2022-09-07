@@ -11,7 +11,9 @@ class AccountMap {
             id,
             name,
             email,
-            avatar_url: `${imageUrls[process.env.disk]}/avatar/${avatar}`,
+            avatar_url: avatar
+                ? `${imageUrls[process.env.disk]}/avatar/${avatar}`
+                : "",
         };
     }
 }

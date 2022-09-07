@@ -3,6 +3,7 @@ import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "../../errors/AppError";
+import { AccountMap } from "../../mappers/AccountMap";
 import { IAccountsRepository } from "../../repositories/accounts/IAccountsRepository";
 
 interface IRequest {
@@ -44,13 +45,11 @@ class SessionUseCase {
             subject: user.id,
         });
 
+        const userData = AccountMap.toDTO(user);
+
         const authResult: IResponse = {
             token,
-            userData: {
-                name: user.name,
-                email: user.email,
-                avatar_url: user.avatar,
-            },
+            userData,
         };
 
         return authResult;

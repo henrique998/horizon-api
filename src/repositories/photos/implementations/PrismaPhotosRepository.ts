@@ -24,6 +24,9 @@ class PrismaPhotosRepository implements IPhotosRepository {
             where: {
                 accountId,
             },
+            orderBy: {
+                createdAt: "desc",
+            },
         });
 
         return photos;
