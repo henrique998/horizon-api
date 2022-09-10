@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
+import { PhotoDataDTO } from "../../../dtos/photo/PhotoDataDTO";
 import { AppError } from "../../../errors/AppError";
 import { IStorageProvider } from "../../../providers/storageProvider/IStorageProvider";
 import { IPhotosRepository } from "../../../repositories/photos/IPhotosRepository";
@@ -18,7 +19,7 @@ class DeletePhotoUseCase {
         private storageProvider: IStorageProvider
     ) {}
 
-    async execute({ accountId, photoId }: IRequest) {
+    async execute({ accountId, photoId }: IRequest): Promise<PhotoDataDTO[]> {
         if (!accountId) {
             throw new AppError("Account id is required!");
         }
@@ -42,6 +43,8 @@ class DeletePhotoUseCase {
         await this.storageProvider.delete(photoToDelete.url, "photos");
 
         await this.photosRepository.delete(photoId);
+
+        return accountPhotos;
     }
 }
 

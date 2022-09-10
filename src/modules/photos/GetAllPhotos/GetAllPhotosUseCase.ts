@@ -14,7 +14,9 @@ class GetAllPhotosUseCase {
     async execute(): Promise<PhotoDataDTO[]> {
         const photosResponse = await this.photosRepository.getAll();
 
-        const photos = photosResponse.map((photo) => PhotoMap.toDTO(photo));
+        const photos = photosResponse
+            .map((photo) => PhotoMap.toDTO(photo))
+            .sort(() => -1);
 
         return photos;
     }

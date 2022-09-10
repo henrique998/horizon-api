@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
+import { PhotoMap } from "../../../mappers/PhotoMap";
 import { DeletePhotoUseCase } from "./DeletePhotoUseCase";
 
 class DeletePhotoController {
@@ -10,12 +11,14 @@ class DeletePhotoController {
 
         const deletePhotoUseCase = container.resolve(DeletePhotoUseCase);
 
-        await deletePhotoUseCase.execute({
+        const response = await deletePhotoUseCase.execute({
             accountId,
             photoId,
         });
 
-        return res.status(204).send();
+        const photos = response.map((photo) => PhotoMap.toDTO(photo));
+
+        return res.status(204).json(photos);
     }
 }
 
