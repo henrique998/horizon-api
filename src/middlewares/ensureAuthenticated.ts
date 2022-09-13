@@ -7,7 +7,7 @@ interface IPayload {
     sub: string;
 }
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 async function ensureAuthenticated(
     req: Request,

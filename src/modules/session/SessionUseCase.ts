@@ -40,7 +40,7 @@ class SessionUseCase {
             throw new AppError("Email or password incorrect!");
         }
 
-        const token = sign({}, process.env.SECRET_KEY, {
+        const token = sign({}, process.env.JWT_SECRET_KEY, {
             expiresIn: "1d",
             subject: user.id,
         });
