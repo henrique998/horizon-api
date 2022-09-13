@@ -1,6 +1,5 @@
 <div align="center">
   <img src="logo-img.png" width="100%" />
-  <h3>Sistema de autenticação desenvolvido sem bibliotecas.</h3>
 </div>
 
 ## 📃 Sobre
